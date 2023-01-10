@@ -1,8 +1,10 @@
 package dz.locationvoiture.api;
 
 import dz.locationvoiture.dto.DemandeReservationDto;
+import dz.locationvoiture.dto.ReservationDto;
 import dz.locationvoiture.exceptions.TraitementDemandeReservationException;
 import dz.locationvoiture.service.DemandeReservationService;
+import dz.locationvoiture.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -14,20 +16,20 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("api/v1")
-public class DemandeReservationApi {
+public class ReservationApi {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DemandeReservationApi.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReservationApi.class);
 
-    private final DemandeReservationService demandeReservationService;
+    private final ReservationService reservationService;
 
-    public DemandeReservationApi(DemandeReservationService demandeReservationService) {
-        this.demandeReservationService = demandeReservationService;
+    public ReservationApi(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
-    @PostMapping("demande-reservation")
-    public void insertDemandeReservation(@RequestBody DemandeReservationDto demandeReservationDto) {
+    @PostMapping("reservation")
+    public void insertReservation(@RequestBody ReservationDto reservationDto) {
         try {
-            demandeReservationService.insertDemandeReservation(demandeReservationDto);
+            reservationService.insertReservation(reservationDto);
         } catch (TraitementDemandeReservationException e) {
             LOGGER.error("Errors:  {}", e.getMessage());
             throw new ResponseStatusException(

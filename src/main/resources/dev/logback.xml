@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="5 seconds">
+
+	<conversionRule conversionWord="crlf"
+					converterClass="org.owasp.security.logging.mask.CRLFConverter" />
+
+	<!-- TODO : changer ver le dossier log tomcat -->
+	<property name="LOG_HOME" value="./target/logs" />
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="ApplicationLogs"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/location-voiture.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss} %level - %crlf(%.-500msg) %n</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}/archived/location-voiture.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<!-- keep 90 days worth of history -->
+			<maxHistory>90</maxHistory>
+			<!-- keep at most 10GB -->
+			<totalSizeCap>10GB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+	<appender name="AuditLogs"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/location-voiture-audit.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%d{dd/MM/yyyy HH:mm:ss};%level;%mdc - %crlf(%.-500msg) %n</Pattern>
+		</encoder>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>${LOG_HOME}/archived/location-voiture-audit.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<!-- keep 90 days worth of history -->
+			<maxHistory>90</maxHistory>
+			<!-- keep at most 10GB -->
+			<totalSizeCap>10GB</totalSizeCap>
+		</rollingPolicy>
+	</appender>
+
+	<!-- Logger du backend à modifier pour passer le niveau en debug -->
+	<logger name="gca.caps.in" level="info"/>
+
+	<logger name="gca.caps.commons.security.spring.audit.AuditHandlerInterceptor" additivity="false">
+		<appender-ref ref="AuditLogs" />
+	</logger>
+
+	<logger name="gca.caps.commons.security.servlet.HabilitationFilter" additivity="false">
+		<appender-ref ref="AuditLogs" />
+	</logger>
+
+	<root level="info">
+		<appender-ref ref="ApplicationLogs" />
+		<appender-ref ref="STDOUT" />
+	</root>
+
+</configuration>

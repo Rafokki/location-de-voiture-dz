@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;
 import java.util.Date;
+import java.util.UUID;
 
 @Builder
 @Getter
@@ -18,4 +19,5 @@ public class DemandeReservationDto {
     private Date datePriseEnCharge;
     @JsonFormat(pattern="yyyy-MM-dd")
     private Date dateDeRetour;
+    private UUID voitureUuid;
 }
