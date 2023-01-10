@@ -1,4 +1,4 @@
-create table if not exists demande_reservation
+CREATE TABLE if not exists demande_reservation
 (
     id                    serial not null,
     date_de_retour        timestamp(6),
@@ -39,13 +39,13 @@ create table if not exists reservation
     primary key (id)
 );
 
-alter table if exists demande_reservation
+ALTER TABLE if exists demande_reservation
     add constraint fk_voiture_id
     foreign key (voiture_id)
     references voiture (id);
 
 
-alter table if exists reservation
+ALTER TABLE if exists reservation
     add constraint fk_demande_reservation
     foreign key (demande_reservation_id)
     references demande_reservation (id);
