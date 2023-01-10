@@ -1,17 +1,18 @@
 package dz.locationvoiture.domaine;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "demande_reservation")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Setter
+@Getter
 public class DemandeReservation {
 
     @Id
@@ -27,4 +28,7 @@ public class DemandeReservation {
     private ZonedDateTime dateDeRetour;
     @Enumerated(EnumType.STRING)
     private DemandeReservationStatus status;
+    private UUID reference;
+    @ManyToOne
+    private Voiture voiture;
 }
