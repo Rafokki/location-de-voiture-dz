@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>dz.locationvoiture</groupId>
+    <artifactId>ihm</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>ihm</name>
+    <description>Demo project for Spring Boot</description>
+    <packaging>jar</packaging>
+    <properties>
+        <nodeVersion>v19.4.0</nodeVersion>
+        <npmVersion>9.2.0</npmVersion>
+        <java.version>17</java.version>
+        <destDir>${project.build.directory}</destDir>
+
+        <!--
+          L'IHM publiée en PROD est le résultat d'un build Angular.
+          Les modules utilisés en Dev ne sont pas utilisé en production.
+          Les vulnérabilités de ces modules de Dev ne donc pas exploitable en production.
+        -->
+        <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
+        <nodeAuditAnalyzerEnabled>true</nodeAuditAnalyzerEnabled>
+        <nodeAuditSkipDevDependencies>true</nodeAuditSkipDevDependencies>
+        <update.version.npm.skip>false</update.version.npm.skip>
+    </properties>
+    <dependencies>
+
+    </dependencies>
+    <profiles>
+        <profile>
+            <id>ci-execution</id>
+            <properties>
+                <update.version.npm.skip>true</update.version.npm.skip>
+            </properties>
+        </profile>
+    </profiles>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>install-node-and-npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>npm-install</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                    </execution>
+                    <!--execution>
+                        <id>run tests</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run test-headless-no-sandboxed</arguments>
+                        </configuration>
+                    </execution-->
+                    <execution>
+                        <id>npm run build</id>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>run build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--
+                      L'héritage de la configuration proxy de Maven ne fonctionne pas.
+                      Il suffit de positionner
+                    -->
+                    <npmInheritsProxyConfigFromMaven>false</npmInheritsProxyConfigFromMaven>
+                </configuration>
+            </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <source>16</source>
+              <target>16</target>
+            </configuration>
+          </plugin>
+        </plugins>
+    </build>
+
+</project>
